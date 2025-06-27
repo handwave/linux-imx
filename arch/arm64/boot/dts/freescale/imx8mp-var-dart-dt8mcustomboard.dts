@@ -7,7 +7,7 @@
 #include "imx8mp-var-dart.dtsi"
 
 / {
-	model = "HANDWAVE IO BOARD V0.4.1 (Variscite DART-MX8M-PLUS on DT8MCustomBoard 2.x)";
+	model = "HANDWAVE TEST BUILD - ADAPTED imx8mp-var-dart-dt8mcustomboard.dts. Variscite DART-MX8M-PLUS on DT8MCustomBoard 2.x";
 
 	chosen {
 		stdout-path = &uart1;

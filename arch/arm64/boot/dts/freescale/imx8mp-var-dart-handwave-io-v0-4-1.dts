@@ -1,0 +1,30 @@
+/dts-v1/;
+
+#include "imx8mp-var-som.dtsi"
+
+/ {
+    model = "HANDWAVE IO BOARD V0.4.1, dedicated .dts file - (Based on Variscite VAR-MX8M-PLUS SOM device tree)";
+    compatible = "variscite,var-som-mx8mp", "fsl,imx8mp";
+
+    chosen {
+        stdout-path = &uart1;
+    };
+};
+
+
+/* Console */
+&uart1 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&pinctrl_uart1>;
+    status = "okay";
+};
+
+&iomuxc {
+	pinctrl_uart1: uart1grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_UART1_RXD__UART1_DCE_RX				0x40
+			MX8MP_IOMUXC_UART1_TXD__UART1_DCE_TX				0x40
+		>;
+	};
+};
+

@@ -183,6 +183,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it626
 			  imx8mp-evk-usdhc1-m2.dtb imx8mp-evk-rm67199.dtb \
 			  imx8mp-evk-dpdk.dtb imx8mp-evk-8mic-swpdm.dtb imx8mp-evk-rpmsg-lpv.dtb imx8mp-evk-revA3-8mic-revE.dtb
 
+dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-dart-handwave-io-v0-4-1.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-dart-dt8mcustomboard.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-dart-dt8mcustomboard-basler-isi0-m7.dtb
 dtb-$(CONFIG_ARCH_MXC) += imx8mp-var-dart-dt8mcustomboard-basler-isi0.dtb

@@ -3,7 +3,7 @@
 #include "imx8mp-var-som.dtsi"
 
 / {
-    model = "HANDWAVE IO BOARD V0.4.1, dedicated .dts file - (Based on Variscite VAR-MX8M-PLUS SOM device tree)";
+    model = "HELLO WORLD - HANDWAVE IO BOARD V0.4.1 (inherits from imx8mp-var-som.dtsi)";
     compatible = "variscite,var-som-mx8mp", "fsl,imx8mp";
 
     chosen {

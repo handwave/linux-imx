@@ -36,7 +36,6 @@
 		startup-delay-us = <100>;
 		off-on-delay-us = <12000>;
 	};
-    
 };
 
 /* Ethernet gigabit??
@@ -84,23 +83,33 @@
 
 
 &iomuxc {
-	pinctrl-names = "default";
+    pinctrl-names = "default";
+    pinctrl-0 = <&pinctrl_hog>;
 
-	pinctrl_uart1: uart1grp {
+    pinctrl_hog: hoggrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_HDMI_DDC_SCL__HDMIMIX_HDMI_SCL			0x400001c2
+			MX8MP_IOMUXC_HDMI_DDC_SDA__HDMIMIX_HDMI_SDA			0x400001c2
+			MX8MP_IOMUXC_HDMI_HPD__HDMIMIX_HDMI_HPD				0x40000010
+			MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC				0x40000010
+		>;
+	};
+	
+    pinctrl_uart1: uart1grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_UART1_RXD__UART1_DCE_RX				0x40
 			MX8MP_IOMUXC_UART1_TXD__UART1_DCE_TX				0x40
 		>;
 	};
 
-	pinctrl_usdhc2_gpio: usdhc2grp-gpio {
+    pinctrl_usdhc2_gpio: usdhc2grp-gpio {
 		fsl,pins = <
 			MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12				0x1c4
 			MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19				0x40
 		>;
 	};
 
-	pinctrl_usdhc2: usdhc2grp {
+    pinctrl_usdhc2: usdhc2grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK				0x190
 			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD				0x1d0
@@ -136,11 +145,12 @@
 		>;
 	};
 
-	pinctrl_gpio_leds: ledgrp {
+    /*
+    pinctrl_gpio_leds: ledgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18				0xc6
 		>;
 	};
+    */
 
 };
-

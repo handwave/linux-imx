@@ -79,7 +79,7 @@
 	backlight: backlight {
 		compatible = "pwm-backlight";
 		pwms = <&pwm1 0 1000000 0>;
-		status = "disabled"; /* CHANGED */
+		status = "okay";
 
 		brightness-levels = < 0  1  2  3  4  5  6  7  8  9
 				     10 11 12 13 14 15 16 17 18 19
@@ -102,7 +102,7 @@
 		height-mm = <87>;
 		label = "gktw70sdae4se";
 		data-mapping = "jeida-24";
-		status = "disabled"; /* CHANGED */
+		status = "okay"; 
 
 		panel-timing {
 			clock-frequency = <33000000>;

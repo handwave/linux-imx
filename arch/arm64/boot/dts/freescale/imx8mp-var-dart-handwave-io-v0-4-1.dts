@@ -166,7 +166,7 @@
 &pwm1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_pwm1>;
-	status = "disabled"; /* CHANGED */
+	status = "okay";  /* does this cause wayland/splash errors if kernel is built with this disabled? */
 };
 
 

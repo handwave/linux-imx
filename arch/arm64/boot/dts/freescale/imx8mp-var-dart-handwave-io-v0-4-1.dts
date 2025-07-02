@@ -392,7 +392,7 @@
 
 /* LVDS */
 &lcdif2 {
-	status = "disabled"; /* CHANGED */
+	status = "okay"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
 };
 
 /* HDMI */
@@ -403,12 +403,12 @@
 };
 
 &ldb {
-	status = "disabled"; /* CHANGED */
+	status = "okay"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
 
 	lvds-channel@0 {
 		fsl,data-mapping = "jeida";
 		fsl,data-width = <24>;
-		status = "disabled"; /* CHANGED */
+		status = "okay"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
 
 		port@1 {
 			reg = <1>;
@@ -421,7 +421,7 @@
 };
 
 &ldb_phy {
-	status = "disabled"; /* CHANGED */
+	status = "okay"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
 };
 
 &mipi_dsi {
@@ -502,6 +502,7 @@
 };
 
 &usb3_1 {
+	phy_type = "usb2";
 	status = "okay";
 };
 

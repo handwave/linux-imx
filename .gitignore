@@ -157,7 +157,7 @@ x509.genkey
 /allyes.config
 
 # Kconfig savedefconfig output
-/defconfig
+#/defconfig # this is ignored in the Variscite out-the-box setup, but i think we should track it, cause we have to do kernel reconfigurations
 
 # Kdevelop4
 *.kdev4

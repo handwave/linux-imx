@@ -76,6 +76,7 @@
                 off-on-delay-us = <12000>;
         };
 
+#if 0
         backlight: backlight {
                 compatible = "pwm-backlight";
                 pwms = <&pwm1 0 1000000 0>;
@@ -94,7 +95,9 @@
                                     100>;
                 default-brightness-level = <80>;
         };
+#endif
 
+#if 0
         panel {
                 compatible = "sgd,gktw70sdae4se", "panel-lvds";
                 backlight = <&backlight>;
@@ -125,6 +128,7 @@
                         };
                 };
         };
+#endif
 
         can0_osc: can0_osc {
                 compatible = "fixed-clock";
@@ -179,11 +183,13 @@
         status = "disabled"; /* CHANGED */
 };
 
+#if 0 
 &pwm1 {
         pinctrl-names = "default";
         pinctrl-0 = <&pinctrl_pwm1>;
         status = "okay";  /* does this cause wayland/splash errors if kernel is built with this disabled? */
 };
+#endif
 
 
 &eqos {
@@ -418,6 +424,7 @@
         thres-high = <3 4>;             /* (FIFO * 3 / 4) */
 };
 
+#if 0
 &ldb {
         status = "disabled"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
 
@@ -435,10 +442,14 @@
                 };
         };
 };
+#endif
 
+
+#if 0
 &ldb_phy {
         status = "disabled"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
 };
+#endif
 
 &mipi_dsi {
 	#address-cells = <1>; // should this be 2? because there is a reg value for ports->port@1, And another reg value for panel@0 ?

@@ -916,7 +916,7 @@
 
         pinctrl_mipi_panel: mipipanelgrp {
                 fsl,pins = <
-                        MX8MP_IOMUXC_SAI2_TXD0__GPIO4_IO26                               0xc6  // SOM connector/pin: J2.60, SOM pin function: SAI2_TXD0 // GPIO4_IO26, SOC ball: SOC.AH16
+                        MX8MP_IOMUXC_SAI2_TXD0__GPIO4_IO26                               0x5  // SOM connector/pin: J2.60, SOM pin function: GPIO4_IO26 (ALT5), SOC ball: SOC.AH16. For pad control bitmask, see NXP document IMX8MPRM, Section 8.2.4.104
                 >;
         };
 

@@ -441,6 +441,8 @@
 };
 
 &mipi_dsi {
+	#address-cells = <1>; // should this be 2? because there is a reg value for ports->port@1, And another reg value for panel@0 ?
+        #size-cells = <0>;
         status = "okay"; /* ACTIVATED for MIPI-DSI integration */
 
         /* BEGIN MIPI-DSI Integration */ 

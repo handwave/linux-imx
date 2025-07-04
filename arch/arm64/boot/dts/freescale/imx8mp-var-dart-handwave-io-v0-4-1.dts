@@ -460,8 +460,8 @@
 	    dvdd-supply = <&reg_dvdd>; // 3v3 digital regulator 
             pinctrl-names = "default";
             pinctrl-0 = <&pinctrl_mipi_panel>;
-	    reset-gpios = <&gpio4 26 GPIO_ACTIVE_HIGH>;  // TODO: test active high or active low? the screen needs default high, resets when the pin goes low. So ACTIVE_LOW seems logical? but the Documentation example is ACTIVE_HIGH
-	    //backlight = <&backlight>; // hmmmmm what to do here? it cant point to the old LVDS backlight node, thats for sure. In the driver documentation, backlight is not in the 'required' list. can we just omit it?
+	    reset-gpios = <&gpio4 26 GPIO_ACTIVE_HIGH>;  // the screen needs default high, resets when the pin goes low. probed the GPIO both ways - ACTIVE_HIGH gets default high behavior. Use this.
+	    //backlight = <&backlight>; // In the driver documentation, backlight is not in the 'required' list, omit it, its always on (controlled by TFT IC).
             status = "okay";
 
             port {

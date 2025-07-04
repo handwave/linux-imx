@@ -76,7 +76,6 @@
                 off-on-delay-us = <12000>;
         };
 
-#if 0
         backlight: backlight {
                 compatible = "pwm-backlight";
                 pwms = <&pwm1 0 1000000 0>;
@@ -95,9 +94,7 @@
                                     100>;
                 default-brightness-level = <80>;
         };
-#endif
 
-#if 0
         panel {
                 compatible = "sgd,gktw70sdae4se", "panel-lvds";
                 backlight = <&backlight>;
@@ -128,7 +125,6 @@
                         };
                 };
         };
-#endif
 
         can0_osc: can0_osc {
                 compatible = "fixed-clock";
@@ -183,13 +179,11 @@
         status = "disabled"; /* CHANGED */
 };
 
-#if 0 
 &pwm1 {
         pinctrl-names = "default";
         pinctrl-0 = <&pinctrl_pwm1>;
         status = "okay";  /* does this cause wayland/splash errors if kernel is built with this disabled? */
 };
-#endif
 
 
 &eqos {
@@ -424,7 +418,6 @@
         thres-high = <3 4>;             /* (FIFO * 3 / 4) */
 };
 
-#if 0
 &ldb {
         status = "disabled"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
 
@@ -442,53 +435,43 @@
                 };
         };
 };
-#endif
 
 
-#if 0
 &ldb_phy {
         status = "disabled"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
 };
-#endif
 
+/* adapted example from https://community.nxp.com/t5/i-MX-Processors/IMX8mp-dsi-panel/m-p/1925422 */
 &mipi_dsi {
-	#address-cells = <1>; // should this be 2? because there is a reg value for ports->port@1, And another reg value for panel@0 ?
-        #size-cells = <0>;
-        status = "okay"; /* ACTIVATED for MIPI-DSI integration */
+        status = "okay"; 
 
-        /* BEGIN MIPI-DSI Integration */ 
-        ports {
-            port@1 {
-                reg = <1>;
-                mipi_out_panel: endpoint {
-                    remote-endpoint = <&mipi_in_panel>;
+        port@1 {
+                mipi_dsi_out: endpoint {
+                    remote-endpoint = <&dsi_panel_in>;
                 };
-            };
         };
 
         // https://www.kernel.org/doc/Documentation/devicetree/bindings/display/panel/feiyang%2Cfy07024di26a30d.txt
         // https://github.com/varigit/linux-imx/blob/lf-6.6.y_6.6.52-2.2.0_var01/Documentation/devicetree/bindings/display/panel/feiyang%2Cfy07024di26a30d.yaml
         panel@0 {
             compatible = "feiyang,fy07024di26a30d";
-	        reg = <0>; // IMPORTANT: 'reg' must match the node name 'panel@reg'. Specifies the DSI virtual channel used by that screen. TODO: CHECK THIS DIGIT IS CORRECT.
-	        avdd-supply = <&reg_avdd>; // analog regulator dc1 switch 
-	        dvdd-supply = <&reg_dvdd>; // 3v3 digital regulator 
-            /*******************************************/
+	    reg = <0>; // IMPORTANT: 'reg' must match the node name 'panel@reg'. Specifies the DSI virtual channel used by that screen. 
+	    avdd-supply = <&reg_avdd>; // analog regulator dc1 switch 
+	    dvdd-supply = <&reg_dvdd>; // 3v3 digital regulator 
             pinctrl-names = "default";
             pinctrl-0 = <&pinctrl_mipi_panel>;
-	        reset-gpios = <&gpio4 26 GPIO_ACTIVE_LOW>;  // TODO: test active high or active low? the screen needs default high, resets when the pin goes low. So ACTIVE_LOW seems logical?
-            /*******************************************/
-	        //backlight = <&backlight>; // hmmmmm what to do here? it cant point to the old LVDS backlight node, thats for sure. In the driver documentation, backlight is not in the 'required' list. can we just omit it?
+	    reset-gpios = <&gpio4 26 GPIO_ACTIVE_HIGH>;  // TODO: test active high or active low? the screen needs default high, resets when the pin goes low. So ACTIVE_LOW seems logical? but the Documentation example is ACTIVE_HIGH
+	    //backlight = <&backlight>; // hmmmmm what to do here? it cant point to the old LVDS backlight node, thats for sure. In the driver documentation, backlight is not in the 'required' list. can we just omit it?
             status = "okay";
 
             port {
-                mipi_in_panel: endpoint {
-                    remote-endpoint = <&mipi_out_panel>;
+                dsi_panel_in: endpoint {
+                    remote-endpoint = <&mipi_dsi_out>;
                 };
             };
 
         };
-        /* END MIPI-DSI Integration */ 
+        
 };
 
 &pcie {

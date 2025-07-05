@@ -35,13 +35,13 @@ struct feiyang_init_cmd {
 };
 
 static const struct feiyang_init_cmd feiyang_init_cmds[] = {
-	{ .data = { 0x80, 0x58 } },
-	{ .data = { 0x81, 0x47 } },
-	{ .data = { 0x82, 0xD4 } },
-	{ .data = { 0x83, 0x88 } },
-	{ .data = { 0x84, 0xA9 } },
-	{ .data = { 0x85, 0xC3 } },
-	{ .data = { 0x86, 0x82 } },
+	{ .data = { 0x80, 0xAC } },
+	{ .data = { 0x81, 0xB8 } },
+	{ .data = { 0x82, 0x09 } },
+	{ .data = { 0x83, 0x78 } },
+	{ .data = { 0x84, 0x7F } },
+	{ .data = { 0x85, 0xBB } },
+	{ .data = { 0x86, 0x70 } },
 };
 
 static int feiyang_prepare(struct drm_panel *panel)

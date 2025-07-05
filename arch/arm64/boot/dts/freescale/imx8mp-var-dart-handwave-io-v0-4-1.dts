@@ -79,7 +79,7 @@
         backlight: backlight {
                 compatible = "pwm-backlight";
                 pwms = <&pwm1 0 1000000 0>;
-                status = "disabled"; /* might cause issues if kernel is rebuilt with this set to disabled */
+                status = "disabled"; /* CHANGED */
 
                 brightness-levels = < 0  1  2  3  4  5  6  7  8  9
                                      10 11 12 13 14 15 16 17 18 19
@@ -95,14 +95,16 @@
                 default-brightness-level = <80>;
         };
 
-        panel {
+#if 0
+	/* old LVDS panel */       
+	panel {
                 compatible = "sgd,gktw70sdae4se", "panel-lvds";
                 backlight = <&backlight>;
                 width-mm = <153>;
                 height-mm = <87>;
                 label = "gktw70sdae4se";
                 data-mapping = "jeida-24";
-                status = "disabled"; /* might cause issues if kernel is rebuilt with this set to disabled */
+                status = "disabled"; /* CHANGED */
 
                 panel-timing {
                         clock-frequency = <33000000>;
@@ -125,6 +127,7 @@
                         };
                 };
         };
+#endif
 
         can0_osc: can0_osc {
                 compatible = "fixed-clock";
@@ -179,10 +182,11 @@
         status = "disabled"; /* CHANGED */
 };
 
+/* used for panel backlight control in dev kit */
 &pwm1 {
         pinctrl-names = "default";
         pinctrl-0 = <&pinctrl_pwm1>;
-        status = "okay";  /* does this cause wayland/splash errors if kernel is built with this disabled? */
+        status = "disabled";  /* CHANGED */
 };
 
 
@@ -408,7 +412,7 @@
 
 /* LVDS */
 &lcdif2 {
-        status = "disabled"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
+        status = "disabled"; /* CHANGED */
 };
 
 /* HDMI */
@@ -419,12 +423,13 @@
 };
 
 &ldb {
-        status = "disabled"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
+        status = "disabled"; /* CHANGED */
 
+#if 0
         lvds-channel@0 {
                 fsl,data-mapping = "jeida";
                 fsl,data-width = <24>;
-                status = "disabled"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
+                status = "disabled"; /* CHANGED */
 
                 port@1 {
                         reg = <1>;
@@ -434,44 +439,45 @@
                         };
                 };
         };
+#endif
 };
 
 
 &ldb_phy {
-        status = "disabled"; /* does this cause wayland/splash errors if kernel is built with this disabled? */
+        status = "disabled"; /* CHANGED */
 };
 
-/* adapted example from https://community.nxp.com/t5/i-MX-Processors/IMX8mp-dsi-panel/m-p/1925422 */
 &mipi_dsi {
         status = "okay"; 
 
         port@1 {
+                reg = <1>;
+
                 mipi_dsi_out: endpoint {
                     remote-endpoint = <&dsi_panel_in>;
                 };
-        };
+        };   
 
+        /* NEW MIPI-DSI panel */
         // https://www.kernel.org/doc/Documentation/devicetree/bindings/display/panel/feiyang%2Cfy07024di26a30d.txt
         // https://github.com/varigit/linux-imx/blob/lf-6.6.y_6.6.52-2.2.0_var01/Documentation/devicetree/bindings/display/panel/feiyang%2Cfy07024di26a30d.yaml
-        panel@0 {
-            compatible = "feiyang,fy07024di26a30d";
-	    reg = <0>; // IMPORTANT: 'reg' must match the node name 'panel@reg'. Specifies the DSI virtual channel used by that screen. 
-	    avdd-supply = <&reg_avdd>; // analog regulator dc1 switch 
-	    dvdd-supply = <&reg_dvdd>; // 3v3 digital regulator 
-            pinctrl-names = "default";
-            pinctrl-0 = <&pinctrl_mipi_panel>;
-	    reset-gpios = <&gpio4 26 GPIO_ACTIVE_HIGH>;  // the screen needs default high, resets when the pin goes low. probed the GPIO both ways - ACTIVE_HIGH gets default high behavior. Use this.
-	    //backlight = <&backlight>; // In the driver documentation, backlight is not in the 'required' list, omit it, its always on (controlled by TFT IC).
-            status = "okay";
+        panel: panel@0 {
+                compatible = "feiyang,fy07024di26a30d";
+                reg = <0>; // Specifies the DSI virtual channel used by that screen. 
+                avdd-supply = <&reg_avdd>; // analog regulator dc1 switch 
+                dvdd-supply = <&reg_dvdd>; // 3v3 digital regulator 
+                pinctrl-names = "default";
+                pinctrl-0 = <&pinctrl_mipi_panel>;
+                reset-gpios = <&gpio4 26 GPIO_ACTIVE_HIGH>;  // the screen needs default high, resets when the pin goes low. probed the GPIO both ways - ACTIVE_HIGH gets default high behavior. Use this.
+                // backlight argument not required (its always on)
+                status = "okay";
 
-            port {
-                dsi_panel_in: endpoint {
-                    remote-endpoint = <&mipi_dsi_out>;
+                port {
+                        dsi_panel_in: endpoint {
+                        remote-endpoint = <&mipi_dsi_out>;
+                        };
                 };
-            };
-
         };
-        
 };
 
 &pcie {

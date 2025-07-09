@@ -57,6 +57,19 @@
                         gpios = <&gpio4 18 GPIO_ACTIVE_HIGH>;
                         linux,default-trigger = "mmc2";
                 };
+
+
+		updn {
+			label ="TFT_UPDN";
+                        gpios = <&gpio4 23 GPIO_ACTIVE_HIGH>; 
+                        default-state = "on";
+		};
+
+                shlr {
+                        label ="TFT_SHLR";
+                        gpios = <&gpio4 25 GPIO_ACTIVE_HIGH>; 
+                        default-state = "off";
+                };
         };
 
         pcie0_refclk: pcie0-refclk {
@@ -906,6 +919,8 @@
         pinctrl_gpio_leds: ledgrp {
                 fsl,pins = <
                         MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18                              0xc6
+			MX8MP_IOMUXC_SAI2_RXD0__GPIO4_IO23                              0x5  // J2, 58. TFT_UPDN
+                        MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25                               0x5  // J2, 56. TFT_SHLR
                 >;
         };
 

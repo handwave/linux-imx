@@ -91,7 +91,7 @@ static const struct cmd_set_entry mcs_rm67191[] = {
 	{0x86, 0x70}, 
 };
 
-
+#if 0
 static const struct cmd_set_entry mcs_rm67199[] = {
 	{0xFE, 0xA0}, {0x2B, 0x18}, {0xFE, 0x70}, {0x7D, 0x05},
 	{0x5D, 0x0A}, {0x5A, 0x79}, {0x5C, 0x00}, {0x52, 0x00},
@@ -126,6 +126,17 @@ static const struct cmd_set_entry mcs_rm67199[] = {
 	{0xBC, 0x00}, {0xBD, 0x01}, {0xBE, 0x0A}, {0xBF, 0x10},
 	{0xC0, 0x11}, {0xFE, 0xA0}, {0x22, 0x00},
 };
+#endif
+
+static const struct cmd_set_entry mcs_rm67199[] = {
+        {0x80, 0xAC},
+        {0x81, 0xB8},
+        {0x82, 0x09},
+        {0x83, 0x78},
+        {0x84, 0x7F},
+        {0x85, 0xBB},
+        {0x86, 0x70},
+};
 
 static const u32 rad_bus_formats[] = {
 	MEDIA_BUS_FMT_RGB888_1X24,
@@ -156,6 +167,7 @@ struct rad_platform_data {
 	int (*enable)(struct rad_panel *panel);
 };
 
+#if 0
 static const struct drm_display_mode default_mode = {
 	.clock = 132000,
 	.hdisplay = 1080,
@@ -171,6 +183,24 @@ static const struct drm_display_mode default_mode = {
 	.flags = DRM_MODE_FLAG_NHSYNC |
 		 DRM_MODE_FLAG_NVSYNC,
 };
+#endif
+
+static const struct drm_display_mode default_mode = {
+        .clock = 1354 * 636 * 60 / 1000, // = 51.6 MHz
+        .hdisplay = 1024,
+        .hsync_start = 1024 + 160,
+        .hsync_end = 1024 + 160 + 2,
+        .htotal = 1024 + 160 + 160 + 10,
+        .vdisplay = 600,
+        .vsync_start = 600 + 23,
+        .vsync_end = 600 + 23 + 1,
+        .vtotal = 600 + 23 + 12 + 1,
+        .width_mm = 154,
+        .height_mm = 86,
+        .flags = DRM_MODE_FLAG_NHSYNC |
+                 DRM_MODE_FLAG_NVSYNC,
+};
+
 
 static inline struct rad_panel *to_rad_panel(struct drm_panel *panel)
 {

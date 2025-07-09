@@ -463,8 +463,8 @@
                 reset-gpio = <&gpio4 26 GPIO_ACTIVE_LOW>;
 		dsi-lanes = <4>;
 		video-mode = <2>; /* what are the differences? just copy example for now */
-		panel-width-mm = <86>;
-		panel-height-mm = <154>;
+		panel-width-mm = <154>;
+		panel-height-mm = <86>;
                 status = "okay";
 
                 port {

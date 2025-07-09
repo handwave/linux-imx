@@ -456,16 +456,15 @@
                 };
         };   
 
-        /* NEW MIPI-DSI panel */
-        // https://www.kernel.org/doc/Documentation/devicetree/bindings/display/panel/feiyang%2Cfy07024di26a30d.txt
-        // https://github.com/varigit/linux-imx/blob/lf-6.6.y_6.6.52-2.2.0_var01/Documentation/devicetree/bindings/display/panel/feiyang%2Cfy07024di26a30d.yaml
         panel {
-                compatible = "feiyang,fy07024di26a30d";
+                compatible = "raydium,rm67191";
                 reg = <0>; 
-                avdd-supply = <&reg_avdd>; 
-                dvdd-supply = <&reg_dvdd>; 
                 pinctrl-0 = <&pinctrl_mipi_panel>;
-                reset-gpios = <&gpio4 26 GPIO_ACTIVE_HIGH>;
+                reset-gpio = <&gpio4 26 GPIO_ACTIVE_LOW>;
+		dsi-lanes = <4>;
+		video-mode = <2>; /* what are the differences? just copy example for now */
+		panel-width-mm = <86>;
+		panel-height-mm = <154>;
                 status = "okay";
 
                 port {

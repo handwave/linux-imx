@@ -186,19 +186,33 @@ static const struct drm_display_mode default_mode = {
 #endif
 
 static const struct drm_display_mode default_mode = {
-        .clock = 1354 * 636 * 60 / 1000, // = 51.6 MHz
-        .hdisplay = 1024,
-        .hsync_start = 1024 + 160,
-        .hsync_end = 1024 + 160 + 2,
-        .htotal = 1024 + 160 + 160 + 1, // reduced from +10 to +1, see if smearing improved
-        .vdisplay = 600,
-        .vsync_start = 600 + 23,
-        .vsync_end = 600 + 23 + 1,
-        .vtotal = 600 + 23 + 12 + 1,
-        .width_mm = 154,
-        .height_mm = 86,
-        .flags = DRM_MODE_FLAG_NHSYNC |
-                 DRM_MODE_FLAG_NVSYNC,
+	/*
+	 * Hacked values for HT070BGEI30 display:
+	 * MIPI CLK Speed:340Mbps(170MHZ)
+	 * H resolution: 1024
+	 * H front porch:160
+	 * H pulse width(sync):10
+	 * H back porch: 160
+	 * V resolution: 600
+	 * V front porch:12
+	 * V pulse width:1
+	 * V back porch: 23
+	*/
+        .clock = 1354 * 636 * 60 / 1000, // pixel clock in kHz. So it should be 170000, not 51667?
+
+        .hdisplay    = 1024,                  // horizontal resolution (pixels) 
+        .hsync_start = 1024 + 160,            // hresolution + hfrontporch 
+        .hsync_end   = 1024 + 160 + 10,       // hresolution + hfrontporch + hpulsewidth
+        .htotal      = 1024 + 160 + 10 + 160, // hresolution + hfrontporch + hpulsewidth + hbackporch
+					 
+        .vdisplay    = 600,                   // vertical resolution (pixels) 
+        .vsync_start = 600 + 12,              // vresolution + vfrontporch
+        .vsync_end   = 600 + 12 + 1,          // vresolution + vfrontporch + vpulsewidth
+        .vtotal      = 600 + 12 + 1 + 23,     // hresolution + vfrontporch + vpulsewidth + vbackporch
+
+        .width_mm    = 154,
+        .height_mm   = 86,
+        .flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
 };
 
 

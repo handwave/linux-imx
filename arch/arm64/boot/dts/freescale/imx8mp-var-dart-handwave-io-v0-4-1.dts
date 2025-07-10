@@ -7,7 +7,7 @@
 #include "imx8mp-var-dart.dtsi"
 
 / {
-        model = "HANDWAVE IO BOARD v0.4.1 with MIPI-DSI 7inch (inherits from Variscite DART-MX8M-PLUS on DT8MCustomBoard 2.x)";
+        model = "HANDWAVE IO BOARD v0.4.1";
 
         chosen {
                 stdout-path = &uart1;
@@ -302,7 +302,9 @@
                 status = "disabled"; /* CHANGED */
         };
 
-        /* Capacitive touch controller */
+        /* Capacitive touch controller - VAR DT8customboard dev kit */
+	// TODO: can we just comment this node out entirely without causing kernel bs? thats better, so no risk if trying to set up interrupt on same pin as our ts controller.
+#if 0
         ft5x06_ts: ft5x06_ts@38 {
                 compatible = "edt,edt-ft5206";
                 reg = <0x38>;
@@ -318,7 +320,9 @@
                 wakeup-source;
                 status = "disabled"; /* CHANGED */ 
         };
+#endif
 };
+
 
 &i2c3 {
         clock-frequency = <400000>;
@@ -327,8 +331,24 @@
         pinctrl-1 = <&pinctrl_i2c3_gpio>;
         scl-gpios = <&gpio5 18 GPIO_ACTIVE_HIGH>;
         sda-gpios = <&gpio5 19 GPIO_ACTIVE_HIGH>;
-        status = "disabled"; /* CHANGED */
+        status = "okay"; 
+
+	gt911_ts@14 {
+		compatible = "goodix,gt911";
+		reg = <0x14>;  // Could also be 0x5d, depends on INT+RESET boot config
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_captouch>;
+		interrupt-parent = <&gpio1>; // TODO: CHANGE PIN FOR OUR DESIGN
+		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
+		irq-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>; 
+		//reset-gpios = <&gpio? ? GPIO_ACTIVE_HIGH>; // TODO: NOT CONNECTED TO SOM ON PCB - TIED TO 3V3.  will this be a problem? do we need the reset controllable? if so, any exposed GPIO we can hack?
+		touchscreen-size-x = <1024>;
+		touchscreen-size-y = <600>;
+                //touchscreen-inverted-x; // optional args - test and see if we need them?
+                //touchscreen-inverted-y;
+	};
 };
+
 
 &i2c4 {
         clock-frequency = <400000>;
@@ -475,7 +495,7 @@
                 pinctrl-0 = <&pinctrl_mipi_panel>;
                 reset-gpio = <&gpio4 26 GPIO_ACTIVE_LOW>;
 		dsi-lanes = <4>;
-		video-mode = <2>; /* what are the differences? just copy example for now */
+		video-mode = <2>; 
 		panel-width-mm = <154>;
 		panel-height-mm = <86>;
                 status = "okay";

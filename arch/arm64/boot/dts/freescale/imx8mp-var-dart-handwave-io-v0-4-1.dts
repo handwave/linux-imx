@@ -333,12 +333,12 @@
         sda-gpios = <&gpio5 19 GPIO_ACTIVE_HIGH>;
         status = "okay"; 
 
-	gt911_ts@14 {
+	gt911_ts@5d {
 		compatible = "goodix,gt911";
-		reg = <0x14>;  // Could also be 0x5d, depends on INT+RESET boot config
+		reg = <0x5d>;  // Could also be 0x14, depends on INT+RESET boot config
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_captouch>;
-		interrupt-parent = <&gpio1>; // TODO: CHANGE PIN FOR OUR DESIGN
+		interrupt-parent = <&gpio1>; 
 		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
 		irq-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>; 
 		//reset-gpios = <&gpio? ? GPIO_ACTIVE_HIGH>; // TODO: NOT CONNECTED TO SOM ON PCB - TIED TO 3V3.  will this be a problem? do we need the reset controllable? if so, any exposed GPIO we can hack?

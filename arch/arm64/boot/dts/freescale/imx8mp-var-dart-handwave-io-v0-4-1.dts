@@ -59,17 +59,20 @@
                 };
 
 
+		// no longer physically connected, updn is hardwired to 3v3 now.
 		updn {
 			label ="TFT_UPDN";
                         gpios = <&gpio4 23 GPIO_ACTIVE_HIGH>; 
                         default-state = "on";
 		};
 
+#if 0
                 shlr {
                         label ="TFT_SHLR";
                         gpios = <&gpio4 25 GPIO_ACTIVE_HIGH>; 
                         default-state = "off";
                 };
+#endif
         };
 
         pcie0_refclk: pcie0-refclk {
@@ -334,18 +337,18 @@
         status = "okay"; 
 
 	gt911_ts@5d {
-		compatible = "goodix,gt911";
-		reg = <0x5d>;  // Could also be 0x14, depends on INT+RESET boot config
+		compatible = "goodix,gt911"; // v0.4.1 touchscreen controllers use Goodix fw version 1060
+		reg = <0x5d>;  // With 0x14, get I2C comms failure: "Error reading 1 bytes from 0x8140: -6"
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_captouch>;
 		interrupt-parent = <&gpio1>; 
 		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
 		irq-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>; 
-		//reset-gpios = <&gpio? ? GPIO_ACTIVE_HIGH>; // TODO: NOT CONNECTED TO SOM ON PCB - TIED TO 3V3.  will this be a problem? do we need the reset controllable? if so, any exposed GPIO we can hack?
+		reset-gpios = <&gpio4 25 GPIO_ACTIVE_HIGH>; // repurposed 'shlr' gpio for this, because shlr can just be fixed 0v, no need for it to be a gpio
 		touchscreen-size-x = <1024>;
 		touchscreen-size-y = <600>;
-                //touchscreen-inverted-x; // optional args - test and see if we need them?
-                //touchscreen-inverted-y;
+                touchscreen-inverted-x; 
+                touchscreen-inverted-y;
 	};
 };
 
@@ -892,7 +895,8 @@
 
         pinctrl_captouch: captouchgrp {
                 fsl,pins = <
-                        MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14                             0x16
+                        MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14                             0x1d6 //0x16 // J3, 48. Touchscreen irq. imx8mm, GPIO1_IO24, 0x1d6 works apparently? look up these settings and replicate. 
+			MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25                               0x149 //0x5  // J2, 56. repurposed TFT_SHLR to TS_RESET. imx8mm, GPIO1_IO26, 0x149 works apparently? look up these settings and replicate.
                 >;
         };
 
@@ -940,7 +944,7 @@
                 fsl,pins = <
                         MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18                              0xc6
 			MX8MP_IOMUXC_SAI2_RXD0__GPIO4_IO23                              0x5  // J2, 58. TFT_UPDN
-                        MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25                               0x5  // J2, 56. TFT_SHLR
+                        //MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25                               0x5  // J2, 56. TFT_SHLR gpio not needed, keep 0v fixed
                 >;
         };
 

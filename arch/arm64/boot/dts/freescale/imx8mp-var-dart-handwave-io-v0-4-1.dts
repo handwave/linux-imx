@@ -59,18 +59,17 @@
                 };
 
 
-		// no longer physically connected, updn is hardwired to 3v3 now.
+#if 0		
 		updn {
 			label ="TFT_UPDN";
                         gpios = <&gpio4 23 GPIO_ACTIVE_HIGH>; 
                         default-state = "on";
 		};
 
-#if 0
                 shlr {
                         label ="TFT_SHLR";
                         gpios = <&gpio4 25 GPIO_ACTIVE_HIGH>; 
-                        default-state = "off";
+                        default-state = "on";
                 };
 #endif
         };
@@ -192,6 +191,15 @@
             regulator-max-microvolt = <1800000>;
             regulator-always-on;
         };
+
+        reg_usb1_vbus: usbdvdd {
+            compatible = "regulator-fixed";
+            regulator-name = "usb-dvdd";
+            regulator-min-microvolt = <5000000>; 
+            regulator-max-microvolt = <5000000>;
+            regulator-always-on;
+        };
+
 };
 
 &aud2htx {
@@ -250,7 +258,8 @@
         sda-gpios = <&gpio5 17 GPIO_ACTIVE_HIGH>;
         status = "disabled"; /* CHANGED */
 
-        typec@3d {
+#if 0
+	typec@3d {
                 compatible = "nxp,ptn5150";
                 pinctrl-names = "default";
                 pinctrl-0 = <&pinctrl_extcon>;
@@ -266,6 +275,7 @@
                         };
                 };
         };
+#endif
 
         ov5640_mipi0: ov5640_mipi@3c {
                 compatible = "ovti,ov5640";
@@ -344,7 +354,7 @@
 		interrupt-parent = <&gpio1>; 
 		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
 		irq-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>; 
-		reset-gpios = <&gpio4 25 GPIO_ACTIVE_HIGH>; // repurposed 'shlr' gpio for this, because shlr can just be fixed 0v, no need for it to be a gpio
+		reset-gpios = <&gpio4 23 GPIO_ACTIVE_HIGH>; // repurposed 'updn' gpio for this, because that gpio can just be fixed voltage
 		touchscreen-size-x = <1024>;
 		touchscreen-size-y = <600>;
                 touchscreen-inverted-x; 
@@ -547,13 +557,16 @@
         status = "disabled"; /* CHANGED */
 };
 
+ 
+
+/******************/
 &usb3_phy0 {
-        fsl,phy-tx-vref-tune = <0xe>;
-        fsl,phy-tx-preemp-amp-tune = <3>;
-        fsl,phy-tx-vboost-level = <5>;
-        fsl,phy-comp-dis-tune = <7>;
-        fsl,pcs-tx-deemph-3p5db = <0x21>;
-        fsl,phy-pcs-tx-swing-full = <0x7f>;
+       // fsl,phy-tx-vref-tune = <0xe>;
+       // fsl,phy-tx-preemp-amp-tune = <3>;
+       // fsl,phy-tx-vboost-level = <5>;
+       // fsl,phy-comp-dis-tune = <7>;
+       // fsl,pcs-tx-deemph-3p5db = <0x21>;
+       // fsl,phy-pcs-tx-swing-full = <0x7f>;
         status = "okay";
 };
 
@@ -562,38 +575,49 @@
 };
 
 &usb_dwc3_0 {
-        dr_mode = "otg";
-        hnp-disable;
-        srp-disable;
-        adp-disable;
-        usb-role-switch;
-        role-switch-default-mode = "none";
-        snps,dis-u1-entry-quirk;
-        snps,dis-u2-entry-quirk;
-        status = "okay";
+        dr_mode = "host";
+        //hnp-disable;
+        //srp-disable;
+        //adp-disable;
+        //usb-role-switch;
+        //role-switch-default-mode = "none";
+        //snps,dis-u1-entry-quirk;
+        //snps,dis-u2-entry-quirk;
+        status = "okay"; 
 
-        port {
-                usb3_drd_sw: endpoint {
-                        remote-endpoint = <&typec_dr_sw>;
-                };
-        };
+        //port {
+        //        usb3_drd_sw: endpoint {
+        //                remote-endpoint = <&typec_dr_sw>;
+        //        };
+        //};
 };
+/******************/
+
+
 
 &usb3_phy1 {
         fsl,phy-tx-preemp-amp-tune = <3>;
         fsl,phy-tx-vref-tune = <0xb>;
-        status = "okay";
+        status = "disabled";
 };
+
 
 &usb3_1 {
         phy_type = "usb2";
-        status = "okay";
+        phys = <&usb3_phy1>;
+        phy-names = "usb2-phy";
+        status = "disabled";
 };
+
 
 &usb_dwc3_1 {
         dr_mode = "host";
-        status = "okay";
+        vbus-supply = <&reg_usb1_vbus>; //////
+        status = "disabled";
 };
+
+
+
 
 &usdhc2 {
         pinctrl-names = "default", "state_100mhz", "state_200mhz";
@@ -895,9 +919,9 @@
 
         pinctrl_captouch: captouchgrp {
                 fsl,pins = <
-                        MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14                             0x1d6 //0x16 // J3, 48. Touchscreen irq. imx8mm, GPIO1_IO24, 0x1d6 works apparently? look up these settings and replicate. 
-			MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25                               0x149 //0x5  // J2, 56. repurposed TFT_SHLR to TS_RESET. imx8mm, GPIO1_IO26, 0x149 works apparently? look up these settings and replicate.
-                >;
+                        MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14                             0x1d6 //0x16 // J3, 48. 			
+			MX8MP_IOMUXC_SAI2_RXD0__GPIO4_IO23                              0x149 //0x5  // J2, 58. repurposed TFT_UPDN to TS_RESET
+		>;
         };
 
 
@@ -943,7 +967,7 @@
         pinctrl_gpio_leds: ledgrp {
                 fsl,pins = <
                         MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18                              0xc6
-			MX8MP_IOMUXC_SAI2_RXD0__GPIO4_IO23                              0x5  // J2, 58. TFT_UPDN
+			//MX8MP_IOMUXC_SAI2_RXD0__GPIO4_IO23                              0x5  // J2, 58. TFT_UPDN
                         //MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25                               0x5  // J2, 56. TFT_SHLR gpio not needed, keep 0v fixed
                 >;
         };
